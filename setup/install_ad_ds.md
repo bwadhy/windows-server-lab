@@ -24,7 +24,20 @@ Após isso, o servidor ainda não é um DC.
 1. No Server Manager, clique no aviso:
    > Promote this server to a domain controller
 
-2. EscolhA:
+2. Escolha:
    - ☑ Add a new forest
+
+3. Opções do controlador:
+   - Domain Controller Capabilities:
+     - ☑ DNS Server 
+     - ☑ Global Cataloga
+ 
+
+Mantenha o nome NetBIOS:
+SERVIDOR30
+
+4. Avance até o fim e reinicie a VM.
+
+---
 
 
