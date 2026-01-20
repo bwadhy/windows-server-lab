@@ -1,0 +1,93 @@
+# Configuração do DNS no Active Directory
+
+## Objetivo
+Configurar o DNS para suportar corretamente o funcionamento do Active Directory, garantindo a resolução de nomes do domínio e dos serviços internos.
+
+---
+
+## Importância do DNS no AD
+O Active Directory depende totalmente do DNS para:
+- Localizar Controladores de Domínio
+- Autenticação de usuários
+- Replicação entre DCs
+- Aplicação de GPOs
+
+Sem DNS correto, o AD simplesmente não funciona.
+
+---
+
+## Validação Inicial
+
+1. Abri o **DNS Manager**
+
+2. Verifiquei se a zona do domínio foi criada automaticamente:
+bruno.corp
+
+---
+
+## Configuração de Forward Lookup Zone
+
+Confirmei:
+- Zona: `bruno.corp`
+- Tipo: AD-integrated
+- Atualizações dinâmicas: Secure only
+
+Isso permite que:
+- O próprio AD registre seus registros automaticamente
+- Clientes do domínio se registrem no DNS
+
+---
+
+## Verificação de Registros Essenciais
+
+Dentro da zona `bruno.corp`, verifiquei a existência de:
+
+- Registros A:
+  - `SERVIDOR30` → IP do servidor
+- Pastas especiais:
+  - `_msdcs`
+  - `_sites`
+  - `_tcp`
+  - `_udp`
+
+Esses registros são usados pelo AD para localizar serviços como:
+- LDAP
+- Kerberos
+- GC (Global Catalog)
+
+---
+
+## Configuração de Interface de Rede
+
+No adaptador de rede do servidor:
+
+- DNS primário:
+192.168.10.30 
+
+
+---
+
+## Testes
+
+No Prompt de Comando:
+
+
+nslookup bruno.corp
+Resultado esperado:
+
+Retornar o IP do DC
+
+
+Todos os testes passando sem erro crítico
+
+Resultado
+DNS funcionando como:
+
+Servidor autoritativo do domínio bruno.corp
+
+Base de funcionamento do Active Directory
+
+Resolução de nomes interna e externa
+
+Sem DNS correto, não existe Active Directory funcional!!!!
+
