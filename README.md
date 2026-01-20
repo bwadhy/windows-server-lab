@@ -20,9 +20,9 @@ Criar um ambiente corporativo simulado com:
 
 ## Arquitetura
 
-PC Cliente
+PC Client
    |
-Windows Server (AD, DNS)
+Windows Server
    |
 Microsoft Entra ID (Cloud)   
 
