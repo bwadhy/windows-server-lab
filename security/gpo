@@ -1,1 +1,128 @@
+# Configuração de Group Policy Objects (GPO)
 
+## Objetivo
+Centralizar e padronizar configurações de segurança e comportamento dos computadores e usuários do domínio através de Group Policy Objects (GPO).
+
+---
+
+## Conceito
+GPO é o mecanismo do Active Directory usado para:
+- Aplicar políticas de segurança
+- Restringir configurações do sistema
+- Automatizar padrões corporativos
+- Controlar usuários e máquinas em larga escala
+
+---
+
+## Criação da Estrutura de OU
+
+Organize o domínio em OUs:
+
+hep.corp
+├── Users
+│ └── TI
+├── Computers
+│ └── Workstations
+├── Colaboradores
+│ └── Colaboradores Ativos
+│ └── Colaboradores férias
+
+Isso permite aplicar políticas diferentes para usuários e computadores.
+
+---
+
+## Criação da Primeira GPO
+
+1. Abra:
+Group Policy Management (gpmc.msc)
+
+2. Clique com o botão direito na OU:
+Workstations
+
+markdown
+Copiar código
+
+3. Selecione:
+Create a GPO in this domain, and Link it here...
+
+
+4. Defina o nome da GPO:
+Baseline-Security-Workstations
+
+---
+
+## Configurações Aplicadas
+
+### 1. Política de senha forte
+Navegue até:
+Computer Configuration
+→ Policies
+→ Windows Settings
+→ Security Settings
+→ Account Policies
+→ Password Policy
+
+Configure:
+- Minimum password length: 8  
+- Password must meet complexity requirements: Enabled  
+- Maximum password age: 60 days  
+
+---
+
+### 2. Bloqueio de tela automático
+
+Navegue até:
+User Configuration
+→ Policies
+→ Administrative Templates
+→ Control Panel
+→ Personalization
+
+
+Configure:
+- Enable screen saver: Enabled  
+- Screen saver timeout: 300 seconds  
+- Password protect the screen saver: Enabled  
+
+---
+
+### 3. Bloqueio do Painel de Controle
+
+Navegue até:
+User Configuration
+→ Policies
+→ Administrative Templates
+→ Control Panel
+
+Configure:
+- Prohibit access to Control Panel and PC Settings: Enabled  
+
+---
+
+## Aplicação da GPO
+
+1. Em um cliente do domínio, execute:
+gpupdate /force
+Para validação, execute:
+
+gpresult /r
+Verifique se a GPO:
+
+Baseline-Security-Workstations
+aparece como aplicada.
+
+Testes Práticos
+Verifique se o usuário não consegue acessar o Painel de Controle
+
+Verifique se a tela bloqueia automaticamente após o tempo configurado
+
+Verifique se a política de senha é aplicada no próximo reset
+
+Resultado
+A GPO passa a funcionar como:
+
+Ferramenta de padronização corporativa
+
+Base da política de segurança do domínio
+
+Controle centralizado de usuários e computadores
