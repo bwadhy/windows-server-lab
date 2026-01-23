@@ -1,0 +1,174 @@
+## Objetivo
+Sincronizar identidades do Active Directory local com o Microsoft Entra ID utilizando o Entra Connect Sync, criando um ambiente híbrido de identidade semelhante ao utilizado em empresas reais.
+
+---
+
+## Conceito
+O Entra Connect permite:
+- Replicar usuários, grupos e senhas do AD local para o Entra ID
+- Unificar autenticação local e em nuvem
+- Aplicar MFA e Acesso Condicional em contas que vêm do AD
+- Centralizar a identidade da empresa no Entra ID
+
+Fluxo de autenticação:
+
+Usuário
+|
+AD Local
+|
+Entra Connect
+|
+Microsoft Entra ID
+|
+Aplicações em nuvem
+
+---
+
+## Pré-requisitos
+
+- Windows Server com:
+  - AD DS instalado
+  - DNS funcionando
+- Tenant Microsoft Entra ID ativo
+- Conta com permissões:
+  - Enterprise Admin no AD
+  - Global Administrator no Entra ID
+- Servidor dedicado ou o próprio DC para o Entra Connect (em lab é aceitável)
+- Domínio válido configurado no Entra ID (ex: wadb.corp ou domínio público)
+
+---
+
+## Download do Entra Connect
+
+1. Acesse:
+https://www.microsoft.com/en-us/download/details.aspx?id=47594
+
+2. Baixe:
+Microsoft Entra Connect
+
+3. Copie o instalador para o Windows Server
+
+---
+
+## Instalação do Entra Connect
+
+1. Execute o instalador como Administrador  
+2. Clique em:
+I agree to the license terms
+3. Selecione:
+Express se quiser já com as configuracões básicas.
+
+---
+
+## Conexão com Entra ID
+
+1. Insira:
+   - Conta Global Administrator do Entra ID
+   - Senha
+
+2. Clique em:
+Next
+
+---
+
+## Conexão com Active Directory
+
+1. Insira:
+   - Usuário Domain Admin
+   - Senha
+
+2. Clique em:
+Next
+
+---
+
+## Configuração de UPN
+
+1. Verifique o sufixo do domínio:
+user@seudominio.onmicrosoft.com (no caso não quis pagar um domínio público)
+
+---
+
+## Finalização
+
+1. Marque:
+Start the synchronization process when configuration completes
+
+css
+Copiar código
+
+2. Clique em:
+Install
+
+yaml
+Copiar código
+
+Aguarde a conclusão.
+
+---
+
+## Validação da Sincronização
+
+1. Acesse:
+https://entra.microsoft.com
+
+2. Vá até:
+Users
+
+Verifique se os usuários do AD aparecem com:
+Source: Windows Server AD
+
+---
+
+## Teste de Login com Usuário do AD
+
+1. Acesse:
+https://portal.office.com
+
+
+
+2. Faça login com:
+usuario@seudominioonmicrosoft.com
+
+
+Resultado esperado:
+- Login bem-sucedido
+- MFA aplicado via Acesso Condicional (se configurado)
+- Conta autenticada como identidade híbrida
+
+---
+
+## Verificação em Logs
+
+1. Acesse:
+Entra ID → Monitoring → Sign-in logs
+
+2. Abra o evento do usuário sincronizado
+
+Verifique:
+Identity type: Hybrid
+Authentication method: Password Hash Sync
+Conditional Access: Applied
+MFA required: Yes (se política estiver ativa)
+
+---
+
+## Resultado
+
+Ambiente configurado como identidade híbrida:
+- AD local como fonte primária de identidade
+- Entra ID como controle de autenticação moderna
+- MFA e Acesso Condicional protegendo usuários locais
+- Arquitetura utilizada em ambientes corporativos reais
+
+Arquitetura final:
+
+Usuário
+|
+AD Local
+|
+Entra Connect
+|
+Microsoft Entra ID
+|
+Aplicações SaaS / Microsoft 365
