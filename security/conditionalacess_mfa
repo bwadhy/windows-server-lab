@@ -1,0 +1,136 @@
+# Integração de MFA via Acesso Condicional (Conditional Access)
+
+## Objetivo
+Implementar autenticação multifator (MFA) utilizando políticas de Acesso Condicional no Microsoft Entra ID, aplicando controle granular sobre quando e como o MFA é exigido, ao invés de usar o Security Defaults.
+
+---
+  
+## Pré-requisitos
+- Tenant Microsoft Entra ID funcional
+- Usuários sincronizados ou criados no Entra ID
+- Conta com permissão de Global Administrator ou Conditional Access Administrator
+- Security Defaults desabilitado
+
+---
+
+## Desabilitar Security Defaults
+
+1. Acesse:
+https://entra.microsoft.com
+
+2. Navegue até:
+Identity → Properties → Manage security defaults
+
+3. Configure:
+Security defaults: Disabled
+
+4. Salve a configuração
+
+Isso é obrigatório para poder usar políticas de Acesso Condicional personalizadas.
+
+---
+
+## Criação da Política de Acesso Condicional para MFA
+
+1. Acesse:
+Entra ID → Protection → Conditional Access
+
+2. Clique em:
+Create new policy
+
+3. Nome da política:
+mfa
+
+---
+
+## Configuração de Usuários
+
+Em:
+Users
+
+
+- Selecione:
+  - Include: All users ou então selecione um grupo para teste 
+  - Exclude: BreakGlassAdmin (conta de emergência sem MFA)
+
+> Sempre mantenha uma conta de emergência sem MFA para evitar lockout total do tenant.
+
+---
+
+## Configuração de Aplicações
+
+Em:
+Cloud apps or actions
+
+- Selecione:
+All cloud apps
+
+Isso força MFA para qualquer aplicação integrada ao Entra ID:
+- Microsoft 365
+- Azure Portal
+- Aplicações corporativas
+- Portais administrativos
+
+---
+
+  ## Habilitar Política
+
+1. Em:
+Enable policy
+
+Selecione:
+On
+
+
+2. Clique em:
+Create
+
+A política passa a valer imediatamente.
+
+---
+
+## Teste de Funcionamento
+
+1. Faça logout do portal:
+https://portal.office.com
+
+2. Faça login novamente
+
+Resultado esperado:
+- Após inserir usuário e senha
+- O Entra ID solicita o segundo fator (MFA)
+
+---
+
+## Validação em Logs
+
+1. Acesse:
+Entra ID → Monitoring → Sign-in logs
+
+2. Abra um evento de login
+
+Verifique:
+Conditional Access → Result: Success
+Authentication Details → MFA required: Yes
+
+3. Teste com um usuário real
+
+Abra uma janela anônima do navegador  
+Acesse:
+https://portal.office.com
+Faça login com um usuário comum do tenant  
+Insira:
+   - Usuário
+   - Senha
+
+Resultado esperado:
+- O Entra ID solicita o segundo fator de autenticação (MFA)
+- O login só é concluído após a validação no Authenticator, SMS ou método configurado
+
+
+
+
+
+
+
+
